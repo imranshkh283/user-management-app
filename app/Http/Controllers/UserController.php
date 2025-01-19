@@ -42,4 +42,10 @@ class UserController extends Controller
             dd($e->getMessage());
         }
     }
+
+    public function deleteUser(int $id)
+    {
+        $user = $this->userService->deleteUser($id);
+        return response()->json($user, 200);
+    }
 }

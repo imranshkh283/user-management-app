@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Cache;
 
 class UserService
 {
@@ -37,7 +38,18 @@ class UserService
         }
 
         $this->userRepository->updateUser($id, $data);
+        $users = $this->userRepository->getAllUsers();
 
+        return $users;
+    }
+
+    public function deleteUser(int $id)
+    {
+        if (!$this->userRepository->getUserById($id)) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $this->userRepository->deleteUser($id);
         $users = $this->userRepository->getAllUsers();
 
         return $users;

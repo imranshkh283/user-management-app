@@ -44,4 +44,9 @@ class UserRepository
 
         User::where('id', $id)->update($data);
     }
+
+    public function deleteUser(int $id)
+    {
+        User::destroy($id);
+    }
 }
