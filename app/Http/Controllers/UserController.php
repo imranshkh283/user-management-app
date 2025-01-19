@@ -14,14 +14,20 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function createUser(UserRequest $request, Response $response)
+    public function createUser(UserRequest $request)
     {
         try {
             $validated = $request->validated();
-            $user = $this->userService->createUser($validated);
-            return response()->json($user, $response->created());
+            $user = $this->userService->createUserAndCache($validated);
+            return response()->json($user, 201);
         } catch (\Throwable $e) {
             dd($e->getMessage());
         }
+    }
+
+    public function getAllUsers()
+    {
+        $users = $this->userService->getAllUsers();
+        return response()->json($users, 200);
     }
 }

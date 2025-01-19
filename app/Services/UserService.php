@@ -13,9 +13,20 @@ class UserService
         $this->userRepository = $userRepository;
     }
 
-    public function createUser(array $data)
+    public function createUserAndCache(array $data)
     {
         $data['password'] = bcrypt($data['password']);
-        return $this->userRepository->createUser($data);
+        $this->userRepository->createUser($data);
+
+        $users = $this->userRepository->getAllUsers();
+
+        return $users;
+    }
+
+    public function getAllUsers()
+    {
+        $users = $this->userRepository->getAllUsers();
+
+        return $users;
     }
 }

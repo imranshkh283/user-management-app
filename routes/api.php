@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Models\User;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,7 +16,7 @@ use App\Models\User;
 |
 */
 
-Route::post('/auth/token', function (AuthRequest $request) {
+Route::post('/auth/token', function (Request $request) {
     $user = User::where('email', $request->email)->first();
 
     if (!$user || !\Hash::check($request->password, $user->password)) {
@@ -29,4 +30,5 @@ Route::post('/auth/token', function (AuthRequest $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/create-user', [UserController::class, 'createUser'])->name('create-user');
+    Route::get('/get-all-users', [UserController::class, 'getAllUsers'])->name('get-all-users');
 });

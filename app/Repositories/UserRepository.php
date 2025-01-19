@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Support\Facades\Cache;
 use App\Models\User;
 
 class UserRepository
@@ -12,13 +13,19 @@ class UserRepository
         return User::create($user);
     }
 
-    public function getUserByEmail(string $email)
+    public function cacheAllUsers()
     {
-        return User::where('email', $email)->first();
+        Cache::remember('all-users', now()->addMinutes(5), function () {
+            return User::all();
+        });
     }
 
-    public function getUserByPhone(string $phone)
+    public function getAllUsers()
     {
-        return User::where('phone', $phone)->first();
+        if (Cache::has('all-users')) {
+            return Cache::get('all-users');
+        } else {
+            $this->cacheAllUsers();
+        }
     }
 }
