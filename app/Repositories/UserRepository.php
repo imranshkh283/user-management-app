@@ -28,4 +28,20 @@ class UserRepository
             $this->cacheAllUsers();
         }
     }
+
+    public function getUserById(int $id)
+    {
+        return User::find($id);
+    }
+
+    public function updateUser(int $id, array $data)
+    {
+        $user = $this->getUserById($id);
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
+        $user->email = $data['email'];
+        $user->phone = $data['phone'];
+
+        User::where('id', $id)->update($data);
+    }
 }

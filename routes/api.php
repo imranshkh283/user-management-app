@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/auth/token', function (Request $request) {
+Route::post('/auth/token', function (AuthRequest $request) {
     $user = User::where('email', $request->email)->first();
 
     if (!$user || !\Hash::check($request->password, $user->password)) {
@@ -31,4 +32,5 @@ Route::post('/auth/token', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/create-user', [UserController::class, 'createUser'])->name('create-user');
     Route::get('/get-all-users', [UserController::class, 'getAllUsers'])->name('get-all-users');
+    Route::put('/update-user/{id}', [UserController::class, 'updateUser'])->name('update-user');
 });

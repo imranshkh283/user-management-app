@@ -29,4 +29,17 @@ class UserService
 
         return $users;
     }
+
+    public function updateUser(int $id, array $data)
+    {
+        if (!$this->userRepository->getUserById($id)) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $this->userRepository->updateUser($id, $data);
+
+        $users = $this->userRepository->getAllUsers();
+
+        return $users;
+    }
 }
