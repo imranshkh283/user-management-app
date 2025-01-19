@@ -12,4 +12,10 @@ class UserService
     {
         $this->userRepository = $userRepository;
     }
+
+    public function createUser(array $data)
+    {
+        $data['password'] = bcrypt($data['password']);
+        return $this->userRepository->createUser($data);
+    }
 }
