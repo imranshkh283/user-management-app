@@ -2,10 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Interfaces\UserRepositoryInterface;
 use Illuminate\Support\Facades\Cache;
 use App\Models\User;
 
-class UserRepository
+class UserRepository implements UserRepositoryInterface
 {
 
     public function createUser(array $user)
