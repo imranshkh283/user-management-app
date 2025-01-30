@@ -14,6 +14,16 @@ class UserRepository implements UserRepositoryInterface
         return User::create($user);
     }
 
+    public function login(array $users)
+    {
+        $user = User::where('email', $users['email'])->first();
+        if (!$user || !\Hash::check($users['password'], $user->password)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+        $token = $user->createToken('Test Token')->plainTextToken;
+        return response()->json(['token' => $token]);
+    }
+
     public function cacheAllUsers()
     {
         Cache::remember('all-users', now()->addMinutes(5), function () {

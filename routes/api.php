@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,21 +16,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/auth/token', function (AuthRequest $request) {
-    $user = User::where('email', $request->email)->first();
-
-    if (!$user || !\Hash::check($request->password, $user->password)) {
-        return response()->json(['message' => 'Invalid credentials'], 401);
-    }
-
-    $token = $user->createToken('Test Token')->plainTextToken;
-
-    return response()->json(['token' => $token]);
+Route::prefix('users')->group(function () {
+    Route::post('/create', [UserController::class, 'createUser'])->name('create');
+    Route::post('/login', [UserController::class, 'login'])->name('login');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/create-user', [UserController::class, 'createUser'])->name('create-user');
+
     Route::get('/get-all-users', [UserController::class, 'getAllUsers'])->name('get-all-users');
-    Route::put('/update-user/{id}', [UserController::class, 'updateUser'])->name('update-user');
+    Route::put('/update-user/{id}', [UserController::class, 'updateUser'])->name('update-user')
+        ->middleware(['checkEmailVerified']);
     Route::delete('/delete-user/{id}', [UserController::class, 'deleteUser'])->name('delete-user');
 });

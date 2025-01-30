@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\UserRepository;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\AuthRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Response\ApiResponseClass;
 
@@ -21,6 +22,17 @@ class UserController extends Controller
             $validated = $request->validated();
             $user = $this->userRepository->createUser($validated);
             return response()->json($user, 201);
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
+    }
+
+    public function login(AuthRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+            $user = $this->userRepository->login($validated);
+            return response()->json($user, 200);
         } catch (\Throwable $e) {
             dd($e->getMessage());
         }
