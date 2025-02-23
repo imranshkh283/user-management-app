@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\UploadController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('upload', [UploadController::class, 'index'])->name('upload');
+Route::post('upload', [UploadController::class, 'upload'])->name('upload');
+Route::post('uploadOnMinio', [UploadController::class, 'uploadOnMinio'])->name('uploadOnMinio');
