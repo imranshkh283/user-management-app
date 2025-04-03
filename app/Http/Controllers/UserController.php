@@ -8,6 +8,8 @@ use App\Http\Requests\AuthRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Response\ApiResponseClass;
 
+use App\Events\UserRegister;
+
 class UserController extends Controller
 {
     private UserRepository $userRepository;
@@ -21,6 +23,8 @@ class UserController extends Controller
         try {
             $validated = $request->validated();
             $user = $this->userRepository->createUser($validated);
+
+            event(new UserRegister($user));
             return response()->json($user, 201);
         } catch (\Throwable $e) {
             dd($e->getMessage());
